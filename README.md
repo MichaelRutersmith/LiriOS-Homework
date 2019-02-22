@@ -21,7 +21,12 @@ Image 5 is the result of search
 
 BAND IN TOWN
 
-image 6 is user picking band in town
+image 6 is user picked What Bands are in Town and is prompted to pick a band and the returned results in image 7.
 
-image 6 is user prompted to pick a band and the returned results
 
+Do what it says
+
+image 7 is what the user sees when they pick do what it says.
+
+
+All results are appended to the log.txt file.
