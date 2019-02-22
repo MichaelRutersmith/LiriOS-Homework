@@ -60,8 +60,33 @@ function getMeSpotify(songTitle) {
 
 }
 
+///band stuff here
 
+let getMeBand = function(bandName) {
+    if(!bandName) {
+        bandName = "Elton John"
+    }
+let URL = "https://rest.bandsintown.com/artists/" + bandName + "/events?app_id=codingbootcamp"
 
+request(URL, function(err, res, body) {
+    if (err) {
+        console.log('Error occurred: ' + err);
+        return;
+    } else {
+        let jsonDataBand = JSON.parse(body);
+        
+        output = space + header +
+            space + 'Artist Name: ' + bandName +
+            space + 'Name of Venue: ' + jsonDataBand[0].venue.name +
+            space + 'Location of Venue: ' + jsonDataBand[0].venue.city +
+            space + 'Date of Concert: ' + jsonDataBand[0].datetime +
+            "\n" + footer;
+
+        console.log(output);
+        writeToLog(output);
+        }
+
+})}
 ///get movie stuff here
 
 let getMeMovie = function(movieName) {
@@ -70,9 +95,8 @@ let getMeMovie = function(movieName) {
         movieName = "Mr Nobody";
     }
 
-    let urlHit = "http://www.omdbapi.com/?t=" + movieName + "&y=&plot=short&apikey=trilogy";
-
-    request(urlHit, function(err, res, body) {
+    let URL = "http://www.omdbapi.com/?t=" + movieName + "&y=&plot=short&apikey=trilogy";
+    request(URL, function(err, res, body) {
         if (err) {
             console.log('Error occurred: ' + err);
             return;
@@ -107,7 +131,7 @@ let questions = [{
         type: 'list',
         name: 'programs',
         message: 'What function do you want to run?',
-        choices: ['Spotify Song Search By Title', 'Movie Name By Title', 'Do what it says']
+        choices: ['Spotify Song Search By Title', 'Movie Name By Title', 'What Bands are in Town', 'Do what it says']
     },
     {
         type: 'input',
@@ -125,6 +149,14 @@ let questions = [{
             return answers.programs == 'Spotify Song Search By Title';
         }
     },
+    {
+        type: 'input',
+        name: 'bandChoice',
+        message: 'What\'s the name of the band you would like to search?',
+        when: function(answers) {
+            return answers.programs == 'What Bands are in Town';
+        }
+    },
 
 ];
 
@@ -133,7 +165,6 @@ inquirer
     .then(answers => {
         // Depending on which program the user chose to run it will do the function for that program
         switch (answers.programs) {
-           
             case 'Spotify Song Search By Title':
                 getMeSpotify(answers.songChoice);
                 break;
@@ -142,6 +173,9 @@ inquirer
                 break;
             case 'Do what it says':
                 doWhatItSays();
+                break;
+            case 'What Bands are in Town':
+                getMeBand(answers.bandChoice);
                 break;
             default:
                 console.log('Please enter a valid Movie or Song title');
